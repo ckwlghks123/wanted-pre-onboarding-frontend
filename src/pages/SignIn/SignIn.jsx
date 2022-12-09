@@ -1,64 +1,31 @@
-import React, { useRef, useState } from "react";
-import axios from "axios";
+import React, { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { getToken } from "../../utils/localStorage";
 
-const URL = process.env.REACT_APP_SERVER_URL;
+import Button from "../../components/Button/Button";
 
-const Login = () => {
-  const emailRef = useRef();
-  const passwordRef = useRef();
-  const [isActive, setIsActive] = useState(false);
+const SignIn = ({ disabled, onClick, onMove }) => {
+  const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    axios
-      .post(`${URL}auth/signin`, {
-        email: emailRef.current.value,
-        password: passwordRef.current.value,
-      })
-      .then((res) => res.data);
-  };
-
-  const handleChange = () => {
-    const emailValid = emailRef.current.value.includes("@");
-    const passwordValid = passwordRef.current.value.length >= 8;
-    emailValid && passwordValid ? setIsActive(true) : setIsActive(false);
-    return;
-  };
+  useEffect(() => {
+    try {
+      const token = getToken();
+      if (token) {
+        navigate("/todo", { replace: true });
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  }, [navigate]);
 
   return (
     <div>
-      <form>
-        <fieldset>
-          <label htmlFor="email">Email</label>
-          <input
-            id="email"
-            name="email"
-            type="email"
-            required
-            placeholder="이메일을 입력 해 주세요."
-            autoComplete="off"
-            onChange={handleChange}
-            ref={emailRef}
-          />
-        </fieldset>
-        <fieldset>
-          <label htmlFor="password">Password</label>
-          <input
-            id="password"
-            name="password"
-            type="password"
-            required
-            placeholder="비밀번호를 입력 해 주세요."
-            onChange={handleChange}
-            ref={passwordRef}
-          />
-        </fieldset>
-        <button disabled={!isActive} onClick={handleSubmit}>
-          로그인
-        </button>
-      </form>
+      <Button disabled={disabled} onClick={onClick}>
+        로그인
+      </Button>
+      <Button onClick={onMove("/sign-up")}>회원가입 페이지로</Button>
     </div>
   );
 };
 
-export default Login;
+export default SignIn;
