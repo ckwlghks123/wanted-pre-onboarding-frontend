@@ -1,10 +1,9 @@
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import SignButton from "../../components/SignButton/SignButton";
 import { getToken } from "../../utils/localStorage";
 
-import Button from "../../components/Button/Button";
-
-const SignIn = ({ disabled, onClick, onMove }) => {
+const SignIn = ({ disabled, onSignIn, onMove }) => {
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -19,12 +18,12 @@ const SignIn = ({ disabled, onClick, onMove }) => {
   }, [navigate]);
 
   return (
-    <div>
-      <Button disabled={disabled} onClick={onClick}>
-        로그인
-      </Button>
-      <Button onClick={onMove("/sign-up")}>회원가입 페이지로</Button>
-    </div>
+    <SignButton
+      disabled={disabled}
+      onSubmit={onSignIn}
+      onMove={onMove("/sign-up")}
+      texts={["로그인", "회원가입"]}
+    />
   );
 };
 
