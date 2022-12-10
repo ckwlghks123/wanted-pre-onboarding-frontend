@@ -18,7 +18,7 @@ const TodoList = () => {
 
     axios
       .post("/todos", { todo: todoInputRef.current.value })
-      .then(({ data }) => setTodos((prev) => [data, ...prev]))
+      .then(({ data }) => setTodos((prev) => [...prev, data]))
       .catch(({ response: { data } }) => console.log(data));
 
     todoInputRef.current.value = "";
